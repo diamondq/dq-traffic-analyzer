@@ -3,10 +3,13 @@ package com.diamondq.traffic.analyzer.ingest;
 import com.diamondq.common.storage.kv.IKVStore;
 import com.diamondq.common.storage.kv.IKVTransaction;
 
+import javax.inject.Inject;
+
 public class GetHostNameProcessor {
 
 	private final IKVStore mKVStore;
 
+	@Inject
 	public GetHostNameProcessor(IKVStore pKVStore) {
 		mKVStore = pKVStore;
 	}
