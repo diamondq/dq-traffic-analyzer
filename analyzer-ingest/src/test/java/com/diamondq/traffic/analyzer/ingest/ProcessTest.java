@@ -2,18 +2,18 @@ package com.diamondq.traffic.analyzer.ingest;
 
 import com.diamondq.common.storage.kv.inmemory.InMemoryStore;
 
+import org.javatuples.Pair;
 import org.junit.Test;
-
-import rx.Observable;
 
 public class ProcessTest {
 
 	@Test
-	public void test() {
+	public void test() throws Throwable {
 
-		Observable<String> ipAddresses = Observable.from(new String[]{"9.189.109.108"});
 		GetHostNameProcessor process = new GetHostNameProcessor(new InMemoryStore());
-		process.process("9.189.109.108");
+		Pair<String, Object> pair = process.process("23.209.11.195", null).get();
+		String host = pair.getValue0();
+		System.out.println(host);
 
 	}
 
