@@ -13,7 +13,9 @@ import org.javatuples.Pair;
 
 public class GetHostNameProcessor {
 
-	private final IKVStore mKVStore;
+	static final String		sCACHE_TABLE	= "ipaddress";
+
+	private final IKVStore	mKVStore;
 
 	@Inject
 	public GetHostNameProcessor(IKVStore pKVStore) {
@@ -27,7 +29,7 @@ public class GetHostNameProcessor {
 			/* First step is to check the database to see if we've already got information about this IP address */
 
 			ExtendedCompletableFuture<Pair<String, CONTEXT>> future =
-				t.getByKey("ipaddress", pIPAddress, null, String.class, pContext);
+				t.getByKey(sCACHE_TABLE, pIPAddress, null, String.class, pContext);
 			return future.splitCompose((p) -> p.getValue0() != null,
 				(p) -> ExtendedCompletableFuture.completedFuture(p), (p) -> {
 
@@ -37,7 +39,7 @@ public class GetHostNameProcessor {
 						InetAddress result = InetAddress.getByName(pIPAddress);
 						String hostName = result.getCanonicalHostName();
 
-						return t.putByKey("ipaddress", pIPAddress, null, hostName, Pair.with(hostName, pContext));
+						return t.putByKey(sCACHE_TABLE, pIPAddress, null, hostName, Pair.with(hostName, pContext));
 					}
 					catch (UnknownHostException ex) {
 						throw new RuntimeException(ex);
